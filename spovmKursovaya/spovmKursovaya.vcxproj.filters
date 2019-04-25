@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков\Parsers">
+      <UniqueIdentifier>{afb4fa9e-f14a-4f3e-a928-f073415b7292}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Exceptions">
+      <UniqueIdentifier>{f8ecb1ec-de95-4f4e-ac14-d92bf3309ea2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Regressions">
+      <UniqueIdentifier>{074f40e5-f9ac-420f-9907-60abd760f8bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Equations">
+      <UniqueIdentifier>{7d39d9a4-4ab0-4541-899c-5815225a1f51}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DataSizeNotEqualException.h">
+      <Filter>Файлы заголовков\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="DSVParser.h">
+      <Filter>Файлы заголовков\Parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearEquation.h">
+      <Filter>Файлы заголовков\Equations</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearRegressionCalculator.h">
+      <Filter>Файлы заголовков\Regressions</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerEquation.h">
+      <Filter>Файлы заголовков\Equations</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerRegressionCalculator.h">
+      <Filter>Файлы заголовков\Regressions</Filter>
+    </ClInclude>
+    <ClInclude Include="ApproximationErrorCalculator.h">
+      <Filter>Файлы заголовков\Regressions</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
