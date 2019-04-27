@@ -53,5 +53,8 @@
     <ClInclude Include="ApproximationErrorCalculator.h">
       <Filter>Файлы заголовков\Regressions</Filter>
     </ClInclude>
+    <ClInclude Include="MultipleRegressionCalculator.h">
+      <Filter>Файлы заголовков\Regressions</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
