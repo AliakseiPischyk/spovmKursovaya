@@ -16,8 +16,7 @@ private:
 	size_t columns;
 
 	static bool correctSizesPassed(const std::vector<std::remove_pointer<data_t>>& dependentData,
-		const std::vector<std::vector<std::remove_pointer<data_t>>>& independentData)
-		throw(DataSizeNotEqualException){
+		const std::vector<std::vector<std::remove_pointer<data_t>>>& independentData){
 
 		const size_t dataSize = dependentData.size();
 		for (const auto& column : independentData) {
@@ -34,7 +33,7 @@ public:
 
 	Matrix(const std::vector<std::remove_pointer<data_t>>& dependentData,
 		const std::vector<std::vector<std::remove_pointer<data_t>>>& independentData ) 
-		throw(DataSizeNotEqualException){
+		noexcept(std::false_type){
 		
 		if (!correctSizesPassed(dependentData, independentData)) {
 			throw DataSizeNotEqualException;
@@ -44,7 +43,8 @@ public:
 
 	static void multiply(const Matrix<data_t>& source1, 
 		const Matrix<data_t>& source2, 
-		Matrix<data_t>& dest) {
+		Matrix<data_t>& dest)
+	noexcept(std::false_type){
 
 	}
 

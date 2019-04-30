@@ -18,7 +18,7 @@ template<char delimeter, class data_t, class = std::enable_if_t<std::is_floating
 class DSVParser {
 private:
 	template <class return_t>
-	static return_t stringCast(const std::string& str) {
+	static __forceinline return_t stringCast(const std::string& str) {
 		std::stringstream ss(str);
 		return_t tmp;
 		ss >> tmp;

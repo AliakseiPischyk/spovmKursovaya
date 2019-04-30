@@ -56,5 +56,14 @@
     <ClInclude Include="MultipleRegressionCalculator.h">
       <Filter>Файлы заголовков\Regressions</Filter>
     </ClInclude>
+    <ClInclude Include="TimeUtil.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadPool.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="DecisionTree.h">
+      <Filter>Файлы заголовков\Regressions</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

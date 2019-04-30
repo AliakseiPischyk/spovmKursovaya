@@ -12,20 +12,23 @@
 template<class data_t, class = std::enable_if_t<std::is_floating_point_v<data_t>>>
 class LinearRegressionCalculator {
 private:
-	static data_t calcGradient(
+	
+	static __forceinline data_t calcGradient(
 		const data_t sumDependentVars,
 		const data_t sumindependentVars,
 		const size_t numElems,
 		const data_t innerProdDepIndep,
 		const data_t innerProdDepDep) {
+
 		return (numElems * innerProdDepIndep - sumDependentVars * sumindependentVars) / (numElems * innerProdDepDep - pow(sumDependentVars, 2));
 	}
 
-	static data_t calcInterceptY(
+	static __forceinline data_t calcInterceptY(
 		const data_t sumDependentVars,
 		const data_t sumindependentVars,
-		const data_t numElems,
+		const size_t numElems,
 		const data_t gradient) {
+
 		return (sumindependentVars - gradient * sumDependentVars) / numElems;
 	}
 
