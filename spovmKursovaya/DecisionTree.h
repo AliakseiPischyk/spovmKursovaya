@@ -6,88 +6,115 @@
 #include <iterator>
 #include <cstddef>
 #include <optional>
+#include <memory>
 #include <functional>
+#include "Pseudonyms.h"
 
-template<class data_t, class = std::enable_if_t<std::is_floating_point_v<data_t>>>
+template<class data_t, class data_iter_t, class = is_arithm<data_t>>
+class Node;
+
+
+template<class iter_t>
+class Subrange;
+
+template<class data_t, class = is_floating<data_t>>
 class DecisionTree
 {
 public:
 
-	static __forceinline data_t calcAvarage(const std::vector<data_t>& values,
-		const std::optional<size_t> begin = std::nullopt,
-		const std::optional<size_t> end = std::nullopt) {
+	template<class InputIt>
+	static  data_t calcRSS(InputIt first, InputIt last) {
+		const data_t avarageValue = std::accumulate(first, last, static_cast < data_t>(0)) / (last - first);
 
-		const size_t beginPos = begin.has_value() ? begin.value() : 0;
-		const size_t endPos = end.has_value() ? end.value() : values.size();
-
-		return std::accumulate(
-			values.cbegin() + beginPos,
-			values.cbegin() + endPos,
-			static_cast<data_t>(0))
-			/ (endPos - beginPos);
-	}
-
-	static  data_t calcRSS(const std::vector<data_t>& values,
-		const std::optional<size_t> begin = std::nullopt,
-		const std::optional<size_t> end = std::nullopt) {
-
-		const size_t beginPos = begin.has_value() ? begin.value() : 0;
-		const size_t endPos = end.has_value() ? end.value() : values.size();
-
-		const data_t avarageValue = calcAvarage(values, beginPos, endPos);
-
-		data_t sum = 0;
-		std::for_each(
-			values.cbegin() + beginPos,
-			values.cbegin() + endPos,
-			[&sum, avarageValue](data_t val) {sum += pow((val - avarageValue), 2); });
-
-		return sum;
-	}
-
-	static void calcRSSForAllGroups(const std::vector<data_t>& values,
-		std::vector<data_t>& valuesRSS,
-		const size_t begin,
-		const size_t end){
-
-		const size_t dataSize = end-begin;
-		valuesRSS.reserve(dataSize-1);
-		
-		for (size_t bound = begin + 1; bound < end; bound++) {
-			valuesRSS.push_back(calcRSS(values, begin, bound)
-			+calcRSS(values,bound,end));
+		data_t RSS = 0;
+		for (; first != last; first++) {
+			RSS += pow(*first - avarageValue, 2);
 		}
+
+		return RSS;
 	}
 
-	static auto partitionPointMinRSS(const std::vector<data_t>& values,
-		const size_t begin,
-		const size_t end){
+	template<class InputIt>
+	static std::vector<data_t> calcRSSForAllGroups(InputIt first,
+		InputIt last) {
 
 		std::vector<data_t> valuesRSS;
-		calcRSSForAllGroups(values,valuesRSS,begin,end);
-		return std::min_element(valuesRSS.cbegin(),valuesRSS.cend());
+		valuesRSS.reserve(last- first);
+		
+		for (auto bound = first + 1; bound != last; bound++) {
+			valuesRSS.push_back(calcRSS(first, bound)
+				+ calcRSS(bound, last));
+		}
+
+		return valuesRSS;	
 	}
 
+	template<class InputIt>
+	static auto partitionPointMinRSS(InputIt first, InputIt last){
+
+		const auto& valuesRSS =	calcRSSForAllGroups(first,last);
+		const auto minRssIter = std::min_element(valuesRSS.cbegin(), valuesRSS.cend());
+		const auto offset = std::distance(valuesRSS.cbegin(), minRssIter);
+		return first + offset;
+	}
+
+	template<class data_t, class data_iter_t>
+	static void pushYes(Node<data_t, data_iter_t>& currNode,
+		const Node<data_t, data_iter_t>& nodeToPush) {
+		currNode.yes = std::make_shared< Node<data_t, data_iter_t>>(nodeToPush);
+	}
+
+	template<class data_t, class data_iter_t>
+	static void pushNo(Node<data_t, data_iter_t>& currNode,
+		const Node<data_t, data_iter_t>& nodeToPush) {
+		currNode.no = std::make_shared< Node<data_t, data_iter_t>>(nodeToPush);
+	}
+
+	template<class InputIt>
+	static void build(InputIt first, InputIt last) {
+		const auto point = partitionPointMinRSS(first, last);
+		if (last - first < 5)
+			return;
+
+		// build
+	}
+
+private:
+//	Tree<data_t> tree;
+};
+
+template<class iter_t>
+class Subrange {
 public:
-	std::unordered_map<Question, SomeWiredNode> map;
+	iter_t first;
+	iter_t last;
+public:
+	Subrange(const iter_t& first, const iter_t& last) :first(first), last(last) {};
 };
 
+template<class data_t, class data_iter_t, class = is_arithm<data_t>>
+class Node {
+	public:
+	std::function<bool(data_t)> question;
+	Subrange<data_iter_t> answers;
+	std::shared_ptr<Node<data_t,data_iter_t>> yes;
+	std::shared_ptr<Node<data_t,data_iter_t>> no;
 
-class Question {
+public:
+	Node(const Subrange<data_iter_t>& answers) : answers(answers) {};
+	Node<data_t,data_iter_t>& operator=(const Node<data_t, data_iter_t>& other) {
+
+		if (this == &other) {
+			return *this;
+		}
+		question = other.question;
+		answers = other.answers;
+		return *this;
+	}
 
 };
 
-class Range {
-private:
-	std::pair<size_t, size_t> offsetFromBegin;
-	//getBegin()const {
-
-	//}
-};
-
-class SomeWiredNode {
-private:
-	Range offset;
-	
-};
-
+//template<class data_t, class = is_arithm<data_t>>
+//class Tree {
+//	Node<data_t> root;
+//};

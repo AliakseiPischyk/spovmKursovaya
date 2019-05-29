@@ -15,7 +15,7 @@ public:
 	ThreadPool(const size_t numThreads);
 	template<class Func, class... Args>
 	auto enqueue(Func&& func, Args&&... args)
-		->std::future<std::invoke_result_t<Func, Args...>>;
+		->std::future<std::_Invoke_result_t<Func, Args...>>;
 	~ThreadPool();
 private:
 	std::vector< std::thread > executors;
@@ -51,7 +51,7 @@ ThreadPool::ThreadPool(const size_t numThreads)
 
 template<class Func, class... Args>
 auto ThreadPool::enqueue(Func&& func, Args&&... args)
--> std::future<typename std::invoke_result_t<Func, Args...>>
+-> std::future<typename std::_Invoke_result_t<Func, Args...>>
 {
 	using return_type = std::invoke_result_t<Func, Args...>;
 

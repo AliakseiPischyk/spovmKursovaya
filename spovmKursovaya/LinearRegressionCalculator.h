@@ -3,86 +3,63 @@
 #include "LinearEquation.h"
 #include "ApproximationErrorCalculator.h"
 #include "DataSizeNotEqualException.h"
-	
+#include "Pseudonyms.h"
+
 #include <vector>
 #include <functional>
 #include <algorithm>
 #include <numeric>
 
-template<class data_t, class = std::enable_if_t<std::is_floating_point_v<data_t>>>
+template<class data_t, class = is_floating<data_t>>
 class LinearRegressionCalculator {
-private:
-	
-	static __forceinline data_t calcGradient(
-		const data_t sumDependentVars,
-		const data_t sumindependentVars,
-		const size_t numElems,
-		const data_t innerProdDepIndep,
-		const data_t innerProdDepDep) {
-
-		return (numElems * innerProdDepIndep - sumDependentVars * sumindependentVars) / (numElems * innerProdDepDep - pow(sumDependentVars, 2));
-	}
+public:
 
 	static __forceinline data_t calcInterceptY(
+		const data_t gradient,
 		const data_t sumDependentVars,
-		const data_t sumindependentVars,
-		const size_t numElems,
-		const data_t gradient) {
+		const data_t sumIndependentVars,
+		const size_t numElems) {
 
-		return (sumindependentVars - gradient * sumDependentVars) / numElems;
+		return (sumDependentVars - gradient * sumIndependentVars) / numElems;
 	}
 
 public:
-	static LinearEquation<data_t> calcRegressionLinearEquation(
-		const std::vector<data_t>& dependentVars,
-		const std::vector<data_t>& independentVars,
-		const std::function<data_t(data_t, data_t)>& accumulator = std::plus<data_t>(),
-		const std::function<data_t(data_t, data_t)>& product = std::multiplies<data_t>()) {
+	static LinearEquation<data_t> calculate(
+		const std::vector<data_t>& dependent,
+		const std::vector<data_t>& independent) {
 
-
-		if (independentVars.size() != dependentVars.size()) {
-			throw DataSizeNotEqualException("infO");
+		if (independent.size() != dependent.size()) {
+			throw DataSizeNotEqualException("Linear regression. Data size not equal");
 		}
-		
+
+		constexpr data_t ZERO = 0;
 		const data_t sumDependentVars = std::accumulate(
-			dependentVars.begin(), 
-			dependentVars.end(), 
-			static_cast<data_t>(0));
+			dependent.begin(), dependent.end(),
+			ZERO);
 
-		const data_t sumindependentVars = std::accumulate(
-			independentVars.begin(), 
-			independentVars.end(),
-			static_cast<data_t>(0));
+		const data_t sumIndependentVars = std::accumulate(
+			independent.begin(),
+			independent.end(),
+			ZERO);
 
-		const data_t innerProdDepDep = std::inner_product(
-			dependentVars.begin(),
-			dependentVars.end(),
-			dependentVars.begin(),
-			static_cast<data_t>(0),
-			accumulator, 
-			product);
+		const data_t sumSquaresIndep = std::inner_product(
+			independent.begin(),
+			independent.end(),
+			independent.begin(),
+			ZERO);
 
 		const data_t innerProdDepIndep = std::inner_product(
-			dependentVars.begin(), 
-			dependentVars.end(), 
-			independentVars.begin(), 
-			static_cast<data_t>(0),
-			accumulator, 
-			product);
+			dependent.begin(),
+			dependent.end(),
+			independent.begin(),
+			ZERO);
 
-		const size_t dataSize = independentVars.size();
-		const data_t gradient = calcGradient(
-			sumDependentVars,
-			sumindependentVars,
-			dataSize, 
-			innerProdDepIndep,
-			innerProdDepDep);
+		const size_t dataSize = independent.size();
 
-		const data_t interceptY = calcInterceptY(
-			sumDependentVars, 
-			sumindependentVars,
-			dataSize,
-			gradient);
+		const data_t gradient = (sumDependentVars * sumIndependentVars - dataSize * innerProdDepIndep)
+			/ (pow(sumIndependentVars, 2) - dataSize * sumSquaresIndep);
+
+		const data_t interceptY = calcInterceptY(gradient, sumDependentVars, sumIndependentVars, dataSize);
 
 		return	LinearEquation<data_t>(gradient, interceptY);
 	}

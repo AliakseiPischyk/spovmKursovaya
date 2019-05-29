@@ -92,6 +92,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -130,13 +131,19 @@
     <ClInclude Include="DataSizeNotEqualException.h" />
     <ClInclude Include="DecisionTree.h" />
     <ClInclude Include="DSVParser.h" />
+    <ClInclude Include="ExponentialEquation.h" />
+    <ClInclude Include="ExponentialEquationCalculator.h" />
+    <ClInclude Include="HyperbolicEquation.h" />
+    <ClInclude Include="HyperbolicRegressionCalculator.h" />
     <ClInclude Include="LinearEquation.h" />
     <ClInclude Include="LinearRegressionCalculator.h" />
+    <ClInclude Include="Modifier.h" />
     <ClInclude Include="MultipleRegressionCalculator.h" />
     <ClInclude Include="PowerEquation.h" />
     <ClInclude Include="PowerRegressionCalculator.h" />
+    <ClInclude Include="Pseudonyms.h" />
+    <ClInclude Include="RidgeRegressionCalculator.h" />
     <ClInclude Include="ThreadPool.h" />
-    <ClInclude Include="TimeUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

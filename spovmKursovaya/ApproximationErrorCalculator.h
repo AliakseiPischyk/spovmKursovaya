@@ -3,14 +3,15 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include "Pseudonyms.h"
 #include "DataSizeNotEqualException.h"
 
-template<class data_t, class = std::enable_if_t<std::is_arithmetic_v<data_t>>>
+template<class data_t, class = is_arithm<data_t>>
 class ApproximationErrorCalculator
 {
 public:
 	template <class ... funcArgTypes, class ... funcArgValues>
-	static data_t calc(
+	static data_t calculate(
 		const std::vector<data_t>& depVars,
 		const std::vector<data_t>& indepVars,
 		const std::function <data_t(funcArgTypes...)>& calcFunc,
@@ -40,6 +41,10 @@ public:
 			/ static_cast<data_t>(dataSize);
 
 		return avarageDeviation;
+	}
+
+	static data_t calcRSS(static LinearEquation<data_t>& equation) {
+
 	}
 };
 

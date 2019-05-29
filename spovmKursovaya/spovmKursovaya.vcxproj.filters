@@ -56,14 +56,32 @@
     <ClInclude Include="MultipleRegressionCalculator.h">
       <Filter>Файлы заголовков\Regressions</Filter>
     </ClInclude>
-    <ClInclude Include="TimeUtil.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="ThreadPool.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="DecisionTree.h">
       <Filter>Файлы заголовков\Regressions</Filter>
+    </ClInclude>
+    <ClInclude Include="ExponentialEquationCalculator.h">
+      <Filter>Файлы заголовков\Regressions</Filter>
+    </ClInclude>
+    <ClInclude Include="Modifier.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Pseudonyms.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="HyperbolicRegressionCalculator.h">
+      <Filter>Файлы заголовков\Regressions</Filter>
+    </ClInclude>
+    <ClInclude Include="RidgeRegressionCalculator.h">
+      <Filter>Файлы заголовков\Regressions</Filter>
+    </ClInclude>
+    <ClInclude Include="HyperbolicEquation.h">
+      <Filter>Файлы заголовков\Equations</Filter>
+    </ClInclude>
+    <ClInclude Include="ExponentialEquation.h">
+      <Filter>Файлы заголовков\Equations</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,12 +1,12 @@
 #pragma once
-
-template<class data_t, class = std::enable_if_t<std::is_arithmetic_v<data_t>>>
-class LinearEquation {
+#include "Pseudonyms.h"
+template<class data_t, class = is_arithm<data_t>>
+class HyperbolicEquaion {
 private:
 	data_t interceptY;
 	data_t slope;
 public:
-	LinearEquation(const data_t slope, const data_t interceptY) noexcept :
+	HyperbolicEquaion(const data_t slope, const data_t interceptY) noexcept :
 		slope(slope), interceptY(interceptY) {}
 
 	data_t getSlope()const noexcept {

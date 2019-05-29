@@ -13,12 +13,13 @@
 #include <algorithm>
 
 #include "DataSizeNotEqualException.h"
+#include "Pseudonyms.h"
 
-template<char delimeter, class data_t, class = std::enable_if_t<std::is_floating_point_v<data_t>>>
+template<char delimeter, class data_t, class = is_floating<data_t>>
 class DSVParser {
 private:
 	template <class return_t>
-	static __forceinline return_t stringCast(const std::string& str) {
+	static __forceinline return_t string_cast(const std::string& str) {
 		std::stringstream ss(str);
 		return_t tmp;
 		ss >> tmp;
@@ -34,7 +35,7 @@ private:
 
 		string valueToken;
 		while (getline(strToParseStream, valueToken, delimeter)) {
-			parsedValues.push_back(stringCast<return_t>(valueToken));
+			parsedValues.push_back(string_cast<return_t>(valueToken));
 		}
 
 		return parsedValues;
@@ -55,7 +56,8 @@ private:
 		std::string bufferWithValues;
 		while (fileStream >> bufferWithValues) {
 			vector<data_t> lineOfParsedValues(parseDSVString<data_t>(bufferWithValues));
-			for (size_t i_key = 0; i_key < lineOfParsedValues.size(); i_key++) {
+			const size_t parsedValuesSize = lineOfParsedValues.size();
+			for (size_t i_key = 0; i_key < parsedValuesSize; i_key++) {
 				values[i_key].push_back(lineOfParsedValues[i_key]);
 			}
 		}
@@ -64,16 +66,17 @@ private:
 	}
 
 	static std::map<std::string, std::vector<data_t>> linkKeysAndValues(std::vector<std::string>& keys, std::vector<std::vector<data_t>>& values) {
+		using namespace std;
 		const auto keysSize = keys.size();
 		const auto valuesSize = values.size();
-		std::map<std::string, std::vector<data_t>> result;
+		map<string, vector<data_t>> result;
 
 		if (keysSize != valuesSize) {
 			throw DataSizeNotEqualException("Amount of keys and values doesn't match");
 		}
 		else {
 			for (size_t i = 0; i < keysSize; i++) {
-				result.insert(std::make_pair<std::string, std::vector<data_t>>(move(keys[i]), std::forward<std::vector<data_t>>(values[i])));
+				result.insert(make_pair<string, vector<data_t>>(move(keys[i]), forward<vector<data_t>>(values[i])));
 			}
 		}
 		return result;

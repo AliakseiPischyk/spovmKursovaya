@@ -17,11 +17,11 @@ public:
 		return power;
 	}
 
-	/*data_t calc(const data_t x)const noexcept {
+	/*data_t calculate(const data_t x)const noexcept {
 		return gradient * (pow(x, power));
 	}*/
 
-	static data_t calc(const data_t x,
+	static data_t calculate(const data_t x,
 		const data_t power,
 		const data_t gradient)noexcept {
 		return gradient * (pow(x, power));
