@@ -33,7 +33,8 @@ public:
 			return abs(static_cast<data_t>(1) - (calcFunc(indepVal, funcArgs...) / depVars[currPos++]));
 		});
 
-		const data_t avarageDeviation = std::accumulate(deviations.cbegin(),
+		const data_t avarageDeviation = std::accumulate(
+			deviations.cbegin(),
 			deviations.cend(),
 			static_cast<data_t>(0))
 			/ static_cast<data_t>(dataSize);

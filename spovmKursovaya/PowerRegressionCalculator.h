@@ -8,7 +8,8 @@
 template<class data_t, class = std::enable_if_t<std::is_floating_point_v<data_t>>>
 class PowerRegressionCalculator {
 private:
-	static data_t calcGradient(const data_t sumLnDep,
+	
+	static __forceinline data_t calcGradient(const data_t sumLnDep,
 		const data_t sumLnIndep,
 		const data_t power,
 		const size_t dataSize) {
@@ -71,7 +72,7 @@ public:
 		std::vector<data_t>& independentData,
 		const std::function<data_t(data_t, data_t)>& accumulator = std::plus<data_t>(),
 		const std::function<data_t(data_t, data_t)>& product = std::multiplies<data_t>()) {
-
+			
 		using namespace std;
 
 		if (dependentData.size() != independentData.size()) {
