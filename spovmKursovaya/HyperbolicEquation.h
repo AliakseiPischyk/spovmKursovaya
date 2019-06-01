@@ -6,14 +6,14 @@ private:
 	data_t interceptY;
 	data_t slope;
 public:
-	HyperbolicEquaion(const data_t slope, const data_t interceptY) noexcept :
+	HyperbolicEquaion(const data_t slope, const data_t interceptY) :
 		slope(slope), interceptY(interceptY) {}
 
-	data_t getSlope()const noexcept {
+	data_t getSlope()const {
 		return slope;
 	}
 
-	data_t getInterceptY()const noexcept {
+	data_t getInterceptY()const {
 		return interceptY;
 	}
 };

@@ -46,11 +46,11 @@ public:
 		}
 
 		constexpr data_t ZERO = 0;
-		vector<data_t> lnDependent = Modifier::applyFunc<data_t>(
+		const vector<data_t> lnDependent = Modifier::applyFunc<data_t>(
 			dependent.cbegin(), dependent.cend(),
 			std::function<data_t(data_t)>([](data_t val) { return log(val); }));
 
-		vector<data_t> lnIndependent = Modifier::applyFunc<data_t>
+		const vector<data_t> lnIndependent = Modifier::applyFunc<data_t>
 			(independent.cbegin(), independent.cend(),
 				std::function<data_t(data_t)>([](data_t val) { return log(val); }));
 
@@ -65,13 +65,6 @@ public:
 		const data_t power = calcPower(lnDependent, lnIndependent, sumLnDependent, sumLnIndependent);
 
 		const data_t gradient = exp((sumLnDependent - power * sumLnIndependent) / independent.size());
-
-		const data_t approximationError = ApproximationErrorCalculator<data_t>::calculate(
-			dependent,
-			independent,
-			std::function<data_t(data_t, data_t, data_t)>(PowerEquation<data_t>::calculate),
-			power,
-			gradient);
 
 		return PowerEquation<data_t>(gradient, power);
 	}

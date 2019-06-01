@@ -114,7 +114,3 @@ public:
 
 };
 
-//template<class data_t, class = is_arithm<data_t>>
-//class Tree {
-//	Node<data_t> root;
-//};

@@ -51,22 +51,22 @@ ThreadPool::ThreadPool(const size_t numThreads)
 
 template<class Func, class... Args>
 auto ThreadPool::enqueue(Func&& func, Args&&... args)
--> std::future<typename std::_Invoke_result_t<Func, Args...>>
+-> std::future<typename std::invoke_result_t<Func, Args...>>
 {
-	using return_type = std::invoke_result_t<Func, Args...>;
+	using return_type = std::invoke_result_t<Func, Args...>; // дл€ выведени€ типа, возвращаемого переданной функцией, в врем€ компил€ции
 
 	auto task = std::make_shared< std::packaged_task<return_type()> >(
 		std::bind(std::forward<Func>(func), std::forward<Args>(args)...)
-		);
+		);//создаем shared_ptr на packeged_task дл€ последующего асинхронного выполнени€ задани€, поставленного в очередь. Ѕиндим передачу аргументов.
 
 	std::future<return_type> res = task->get_future();
 	{
-		std::unique_lock<std::mutex> lock(queueMutex);
+		std::unique_lock<std::mutex> lock(queueMutex);//блокируем очередь
 
-		if (stoped)
+		if (stoped)//если вызван деструктор ThreadPool, выкидываем ошибку
 			throw std::runtime_error("enqueue on stopedped ThreadPool");
 
-		tasks.emplace([task]() { (*task)(); });
+		tasks.emplace([task]() { (*task)(); });//ставим задание в конец очереди+начинаем его выполнение
 	}
 	conditionVariable.notify_one();
 	return res;

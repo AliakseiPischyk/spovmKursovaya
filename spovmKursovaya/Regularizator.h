@@ -7,6 +7,7 @@
 #include "LinearRegressionCalculator.h"
 #include "LinearEquation.h"
 #include "ThreadPool.h"
+#include "Generator.h"
 #include <algorithm>
 
 enum RegulatorType {
@@ -16,10 +17,9 @@ enum RegulatorType {
 };
 
 template<class data_t>
-class RidgeRegressionCalculator {
+class Regularizator {
 private:
-	//ThreadPool executors(8);
-public:
+
 	static __forceinline data_t calculateGradient(
 		const data_t innerProdDepIndep,
 		const data_t sumSquaresIndep,
@@ -47,14 +47,13 @@ public:
 
 		possibleGradients.reserve(regulatorType ==
 			RegulatorType::ElasticNet ?
-			pow(numSubstitutionAttempts, 2) :
+			static_cast<size_t>(pow(numSubstitutionAttempts, 2)) :
 			numSubstitutionAttempts);
 
 		switch (regulatorType) {
 		case RegulatorType::ElasticNet: {
 			for (data_t lambdaRidge : lambdasRidge) {
 				for (data_t lambdaLasso : lambdasLasso) {
-					//executors.enqueue();
 					possibleGradients.push_back(
 						calculateGradient(
 							innerProdDepIndep,
@@ -97,7 +96,8 @@ public:
 		linearEquations.reserve(numGradients);
 
 		for (size_t i = 0; i < numGradients; i++) {
-			linearEquations.push_back(LinearEquation<data_t>(gradients[i], interceptsY[i]));
+			linearEquations.push_back(
+				LinearEquation<data_t>(gradients[i], interceptsY[i]));
 		}
 
 		return linearEquations;
@@ -112,12 +112,13 @@ public:
 
 		const data_t slope = equation.getSlope();
 		const data_t interceptY = equation.getInterceptY();
-		std::transform(independent.cbegin(),
-			independent.cend(),
+		std::transform(
+			independent.cbegin(), independent.cend(),
 			actualResults.begin(),
 			[slope, interceptY](data_t value) {return value * slope + interceptY; });
 
-		return std::inner_product(dependent.cbegin(), dependent.cend(),
+		return std::inner_product(
+			dependent.cbegin(), dependent.cend(),
 			actualResults.cbegin(),
 			static_cast<data_t>(0),
 			std::plus<data_t>(),
@@ -148,7 +149,7 @@ public:
 
 		const size_t dataSize = lambdasLasso.size();
 		data_t currErr = std::numeric_limits<data_t>::max();
-		data_t lastErr = std::numeric_limits<data_t>::max();
+		data_t lastErr = currErr;
 		size_t bestEquationIdx = 0;
 
 		switch (regulator) {
@@ -190,7 +191,10 @@ public:
 		return equations[bestEquationIdx];
 	}
 
-	static LinearEquation<data_t> calculate(const std::vector<data_t>& dep,
+	public:
+
+	static LinearEquation<data_t> calculate(
+		const std::vector<data_t>& dep,
 		const std::vector<data_t>& indep,
 		const std::vector<data_t>& testDep,
 		const std::vector<data_t>& testIndep,
@@ -201,33 +205,33 @@ public:
 
 		constexpr data_t ZERO = 0;
 
-		const data_t innerProdDepIndep = std::inner_product(dep.cbegin(),
-			dep.cend(),
+		const data_t innerProdDepIndep = std::inner_product(
+			dep.cbegin(), dep.cend(),
 			indep.cbegin(),
 			ZERO);
 
-		const data_t sumSquaresIndep = std::inner_product(indep.begin(),
-			indep.cend(),
+		const data_t sumSquaresIndep = std::inner_product(
+			indep.begin(), indep.cend(),
 			indep.cbegin(),
 			ZERO);
 
-		const data_t sumDep = std::accumulate(dep.cbegin(),
-			dep.cend(),
+		const data_t sumDep = std::accumulate(
+			dep.cbegin(), dep.cend(),
 			ZERO);
 
-		const data_t sumIndep = std::accumulate(indep.cbegin(),
-			indep.cend(),
+		const data_t sumIndep = std::accumulate(
+			indep.cbegin(),	indep.cend(),
 			ZERO);
 
 		const std::vector<data_t> lambdasLasso =
 			regulatorType == RegulatorType::LASSO || regulatorType == RegulatorType::ElasticNet ?
-			Modifier::generateSequence<data_t>(minLambda, step, maxLambda) :
-			Modifier::generateValues<data_t>((maxLambda - minLambda) / step, 0);
+			Generator::generateSequence<data_t>(minLambda, step, maxLambda) :
+			Generator::generateValues<data_t>(static_cast<size_t>((maxLambda - minLambda) / step), 0);
 
 		const std::vector<data_t> lambdasRidge =
 			regulatorType == RegulatorType::Ridge || regulatorType == RegulatorType::ElasticNet ?
-			Modifier::generateSequence<data_t>(minLambda, step, maxLambda) :
-			Modifier::generateValues<data_t>((maxLambda - minLambda) / step, 0);
+			Generator::generateSequence<data_t>(minLambda, step, maxLambda) :
+			Generator::generateValues<data_t>(static_cast<size_t>((maxLambda - minLambda) / step), 0);
 
 		const std::vector<data_t> possibleGradients = calculatePossibleGradients(
 			innerProdDepIndep, sumSquaresIndep,
@@ -236,7 +240,8 @@ public:
 		const std::vector<LinearEquation<data_t>> possibleEquations =
 			makeEquations(possibleGradients, sumDep, sumIndep, dep.size());
 
-		const LinearEquation<data_t> bestEquation = findBestLinearEquation(possibleEquations,
+		const LinearEquation<data_t> bestEquation = findBestLinearEquation(
+			possibleEquations,
 			testDep, testIndep,
 			lambdasRidge, lambdasLasso,
 			regulatorType);

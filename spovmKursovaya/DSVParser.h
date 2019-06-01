@@ -26,7 +26,8 @@ private:
 		return tmp;
 	}
 
-	template<class return_t, class = std::enable_if_t < std::is_same_v<return_t, data_t> || std::is_same_v<return_t, std::string>>>
+	template<class return_t, class = std::enable_if_t <
+		std::is_same_v<return_t, data_t> || std::is_same_v<return_t, std::string>>>
 	static std::vector<return_t> parseDSVString(const std::string& strToParse) {
 		using namespace std;
 
@@ -48,13 +49,14 @@ private:
 		return parseDSVString<string>(bufferForKeys);
 	}
 
-	static std::vector<std::vector<data_t>> getValues(std::ifstream& fileStream, const size_t amountOfValuesInColumn) {
+	static std::vector<std::vector<data_t>> getValues(
+		std::ifstream& stream, const size_t amountOfValuesInColumn) {
 		using namespace std;
 		vector<vector<data_t>> values;
 		values.resize(amountOfValuesInColumn);
 
 		std::string bufferWithValues;
-		while (fileStream >> bufferWithValues) {
+		while (stream >> bufferWithValues) {
 			vector<data_t> lineOfParsedValues(parseDSVString<data_t>(bufferWithValues));
 			const size_t parsedValuesSize = lineOfParsedValues.size();
 			for (size_t i_key = 0; i_key < parsedValuesSize; i_key++) {
@@ -65,7 +67,8 @@ private:
 		return values;
 	}
 
-	static std::map<std::string, std::vector<data_t>> linkKeysAndValues(std::vector<std::string>& keys, std::vector<std::vector<data_t>>& values) {
+	static std::map<std::string, std::vector<data_t>> linkKeysAndValues(
+		std::vector<std::string>& keys, std::vector<std::vector<data_t>>& values) {
 		using namespace std;
 		const auto keysSize = keys.size();
 		const auto valuesSize = values.size();
@@ -76,7 +79,8 @@ private:
 		}
 		else {
 			for (size_t i = 0; i < keysSize; i++) {
-				result.insert(make_pair<string, vector<data_t>>(move(keys[i]), forward<vector<data_t>>(values[i])));
+				result.insert(make_pair<string, vector<data_t>>(
+					move(keys[i]), forward<vector<data_t>>(values[i])));
 			}
 		}
 		return result;

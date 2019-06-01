@@ -14,7 +14,8 @@ public:
 			const std::vector<data_t>& independent) {
 
 		if (dependent.size() != independent.size()) {
-			throw DataSizeNotEqualException("Error in Exponential regression. Data size not equal");
+			throw DataSizeNotEqualException(
+				"Error in Exponential regression. Data size not equal");
 		}
 
 		const std::vector<data_t> lnDependent = Modifier::applyFunc<data_t>(

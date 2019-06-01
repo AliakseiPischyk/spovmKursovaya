@@ -7,23 +7,19 @@ private:
 	data_t power;
 
 public:
-	PowerEquation(const data_t gradient, const data_t power) :gradient(gradient), power(power) {};
+	PowerEquation(const data_t gradient, const data_t power) :
+		gradient(gradient), power(power) {};
 
-	data_t getGradient()const noexcept {
+	data_t getGradient()const {
 		return gradient;
 	}
 
-	data_t getPower()const noexcept {
+	data_t getPower()const {
 		return power;
 	}
 
-	/*data_t calculate(const data_t x)const noexcept {
-		return gradient * (pow(x, power));
-	}*/
-
 	static data_t calculate(const data_t x,
-		const data_t power,
-		const data_t gradient)noexcept {
+		const data_t power,	const data_t gradient) {
 		return gradient * (pow(x, power));
 	}
 };

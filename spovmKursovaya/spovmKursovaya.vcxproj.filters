@@ -74,14 +74,17 @@
     <ClInclude Include="HyperbolicRegressionCalculator.h">
       <Filter>Файлы заголовков\Regressions</Filter>
     </ClInclude>
-    <ClInclude Include="RidgeRegressionCalculator.h">
-      <Filter>Файлы заголовков\Regressions</Filter>
-    </ClInclude>
     <ClInclude Include="HyperbolicEquation.h">
       <Filter>Файлы заголовков\Equations</Filter>
     </ClInclude>
     <ClInclude Include="ExponentialEquation.h">
       <Filter>Файлы заголовков\Equations</Filter>
+    </ClInclude>
+    <ClInclude Include="Regularizator.h">
+      <Filter>Файлы заголовков\Regressions</Filter>
+    </ClInclude>
+    <ClInclude Include="Generator.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -43,7 +43,7 @@ public:
 		return avarageDeviation;
 	}
 
-	static data_t calcRSS(static LinearEquation<data_t>& equation) {
+	static data_t calcRSS(const LinearEquation<data_t>& equation) {
 
 	}
 };

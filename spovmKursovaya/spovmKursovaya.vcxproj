@@ -133,6 +133,7 @@
     <ClInclude Include="DSVParser.h" />
     <ClInclude Include="ExponentialEquation.h" />
     <ClInclude Include="ExponentialEquationCalculator.h" />
+    <ClInclude Include="Generator.h" />
     <ClInclude Include="HyperbolicEquation.h" />
     <ClInclude Include="HyperbolicRegressionCalculator.h" />
     <ClInclude Include="LinearEquation.h" />
@@ -142,7 +143,7 @@
     <ClInclude Include="PowerEquation.h" />
     <ClInclude Include="PowerRegressionCalculator.h" />
     <ClInclude Include="Pseudonyms.h" />
-    <ClInclude Include="RidgeRegressionCalculator.h" />
+    <ClInclude Include="Regularizator.h" />
     <ClInclude Include="ThreadPool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
