@@ -10,6 +10,8 @@ public:
 	PowerEquation(const data_t gradient, const data_t power) :
 		gradient(gradient), power(power) {};
 
+	PowerEquation() = default;
+
 	data_t getGradient()const {
 		return gradient;
 	}
@@ -19,7 +21,7 @@ public:
 	}
 
 	static data_t calculate(const data_t x,
-		const data_t power,	const data_t gradient) {
+		const data_t power, const data_t gradient) {
 		return gradient * (pow(x, power));
 	}
 };

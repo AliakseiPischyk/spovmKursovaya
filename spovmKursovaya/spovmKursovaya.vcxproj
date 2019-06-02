@@ -129,11 +129,13 @@
   <ItemGroup>
     <ClInclude Include="ApproximationErrorCalculator.h" />
     <ClInclude Include="DataSizeNotEqualException.h" />
+    <ClInclude Include="DataSplitter.h" />
     <ClInclude Include="DecisionTree.h" />
     <ClInclude Include="DSVParser.h" />
     <ClInclude Include="ExponentialEquation.h" />
     <ClInclude Include="ExponentialEquationCalculator.h" />
     <ClInclude Include="Generator.h" />
+    <ClInclude Include="StringParser.h" />
     <ClInclude Include="HyperbolicEquation.h" />
     <ClInclude Include="HyperbolicRegressionCalculator.h" />
     <ClInclude Include="LinearEquation.h" />
@@ -145,6 +147,7 @@
     <ClInclude Include="Pseudonyms.h" />
     <ClInclude Include="Regularizator.h" />
     <ClInclude Include="ThreadPool.h" />
+    <ClInclude Include="WrongLambdaException.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

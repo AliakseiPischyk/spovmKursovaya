@@ -9,7 +9,7 @@
 #include "ThreadPool.h"
 #include "Generator.h"
 #include <algorithm>
-
+#include "WrongLambdaException.h"
 enum RegulatorType {
 	Ridge,
 	LASSO,
@@ -191,7 +191,7 @@ private:
 		return equations[bestEquationIdx];
 	}
 
-	public:
+public:
 
 	static LinearEquation<data_t> calculate(
 		const std::vector<data_t>& dep,
@@ -203,48 +203,53 @@ private:
 		const data_t step,
 		const data_t maxLambda) {
 
-		constexpr data_t ZERO = 0;
+		if (minLambda < 0 || maxLambda < 0 || step <= 0 || minLambda>=maxLambda) {
+			throw WrongLambdaException("Error in regularizator. Wrong lambdas passed");
+		}
+		constexpr data_t ZERO = 0;//константный нуль для передачи в функции-аккумуляторы
 
 		const data_t innerProdDepIndep = std::inner_product(
 			dep.cbegin(), dep.cend(),
 			indep.cbegin(),
-			ZERO);
+			ZERO);//скалярное произведение зависимых и независимых переменных
 
 		const data_t sumSquaresIndep = std::inner_product(
 			indep.begin(), indep.cend(),
 			indep.cbegin(),
-			ZERO);
+			ZERO);//сумма квадратов независимых переменных
 
 		const data_t sumDep = std::accumulate(
 			dep.cbegin(), dep.cend(),
-			ZERO);
+			ZERO);//сумма зависимых переменных
 
 		const data_t sumIndep = std::accumulate(
-			indep.cbegin(),	indep.cend(),
-			ZERO);
+			indep.cbegin(), indep.cend(),
+			ZERO);//сумма независимых переменных
 
 		const std::vector<data_t> lambdasLasso =
 			regulatorType == RegulatorType::LASSO || regulatorType == RegulatorType::ElasticNet ?
 			Generator::generateSequence<data_t>(minLambda, step, maxLambda) :
 			Generator::generateValues<data_t>(static_cast<size_t>((maxLambda - minLambda) / step), 0);
+		//инициализируем лямбды для ЛАССО регрессии и эластичной сети последовательностью от minLambda до maxLabda с шагом step. если Ридж регрессия, то заполняем нулями
 
 		const std::vector<data_t> lambdasRidge =
 			regulatorType == RegulatorType::Ridge || regulatorType == RegulatorType::ElasticNet ?
 			Generator::generateSequence<data_t>(minLambda, step, maxLambda) :
 			Generator::generateValues<data_t>(static_cast<size_t>((maxLambda - minLambda) / step), 0);
+		//инициализируем лямбды для Ридж регрессии и эластичной сети последовательностью от minLambda до maxLabda с шагом step. если Лассо регрессия, то заполняем нулями
 
 		const std::vector<data_t> possibleGradients = calculatePossibleGradients(
 			innerProdDepIndep, sumSquaresIndep,
-			lambdasRidge, lambdasLasso, regulatorType);
+			lambdasRidge, lambdasLasso, regulatorType); // считаем все возможные градиенты, пробуя все возможнные комбинации лямбд
 
 		const std::vector<LinearEquation<data_t>> possibleEquations =
-			makeEquations(possibleGradients, sumDep, sumIndep, dep.size());
+			makeEquations(possibleGradients, sumDep, sumIndep, dep.size());//на основе полученных градиентов строим возможные уравнения
 
 		const LinearEquation<data_t> bestEquation = findBestLinearEquation(
 			possibleEquations,
 			testDep, testIndep,
 			lambdasRidge, lambdasLasso,
-			regulatorType);
+			regulatorType); //определяем уравнения, описывающее модель наилучшим образом, основываясь на тестовых данных
 
 		return bestEquation;
 	}

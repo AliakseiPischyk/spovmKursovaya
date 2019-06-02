@@ -14,21 +14,15 @@
 
 #include "DataSizeNotEqualException.h"
 #include "Pseudonyms.h"
+#include "StringParser.h"
 
 template<char delimeter, class data_t, class = is_floating<data_t>>
 class DSVParser {
 private:
-	template <class return_t>
-	static __forceinline return_t string_cast(const std::string& str) {
-		std::stringstream ss(str);
-		return_t tmp;
-		ss >> tmp;
-		return tmp;
-	}
 
 	template<class return_t, class = std::enable_if_t <
 		std::is_same_v<return_t, data_t> || std::is_same_v<return_t, std::string>>>
-	static std::vector<return_t> parseDSVString(const std::string& strToParse) {
+		static std::vector<return_t> parseDSVString(const std::string& strToParse) {
 		using namespace std;
 
 		vector<return_t> parsedValues;
@@ -36,17 +30,10 @@ private:
 
 		string valueToken;
 		while (getline(strToParseStream, valueToken, delimeter)) {
-			parsedValues.push_back(string_cast<return_t>(valueToken));
+			parsedValues.push_back(StringParser::string_cast<return_t>(valueToken));
 		}
 
 		return parsedValues;
-	}
-
-	static std::vector<std::string> getKeys(std::ifstream& fileStream) {
-		using namespace std;
-		string bufferForKeys;
-		fileStream >> bufferForKeys;
-		return parseDSVString<string>(bufferForKeys);
 	}
 
 	static std::vector<std::vector<data_t>> getValues(
@@ -87,6 +74,13 @@ private:
 	}
 
 public:
+
+	static std::vector<std::string> getKeys(std::ifstream& fileStream) {
+		using namespace std;
+		string bufferForKeys;
+		fileStream >> bufferForKeys;
+		return parseDSVString<string>(bufferForKeys);
+	}
 
 	static std::map<std::string, std::vector<data_t>> read(const std::filesystem::path& fromFile) {
 		using namespace std;

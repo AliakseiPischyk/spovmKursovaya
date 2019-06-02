@@ -9,6 +9,8 @@ public:
 	LinearEquation(const data_t slope, const data_t interceptY) :
 		slope(slope), interceptY(interceptY) {}
 
+	LinearEquation() = default;
+
 	data_t getSlope()const {
 		return slope;
 	}

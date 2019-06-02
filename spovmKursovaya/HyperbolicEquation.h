@@ -7,7 +7,9 @@ private:
 	data_t slope;
 public:
 	HyperbolicEquaion(const data_t slope, const data_t interceptY) :
-		slope(slope), interceptY(interceptY) {}
+		slope(slope), interceptY(interceptY) {};
+
+	HyperbolicEquaion() = default;
 
 	data_t getSlope()const {
 		return slope;

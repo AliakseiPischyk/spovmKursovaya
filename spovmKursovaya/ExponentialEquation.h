@@ -9,6 +9,8 @@ private:
 public:
 	ExponentialEquation(const data_t base, const data_t interceptY) :interceptY(interceptY), base(base) {};
 
+	ExponentialEquation() = default;
+
 	data_t getInterceptY()const {
 		return interceptY;
 	}

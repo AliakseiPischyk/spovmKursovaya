@@ -176,9 +176,9 @@ public:
 		constexpr cacheBytes L1 = 32 * 1024;
 		constexpr cacheBytes L2 = 1024 * 1024;
 		constexpr cacheBytes L3 = 8 * 1024 * 1024;
-		 size_t minK = std::min(L1 / 4 / 16, K) / 4 * 4;
-		 size_t minM = std::min(L2 / 4 / minK, M) / 6 * 6;
-		 size_t minN = std::min(L3 / 4 / minK, N) / 16 * 16;
+		size_t minK = std::min(L1 / 4 / 16, K) / 4 * 4;
+		size_t minM = std::min(L2 / 4 / minK, M) / 6 * 6;
+		size_t minN = std::min(L3 / 4 / minK, N) / 16 * 16;
 		buf_t bufB(minN * minK);
 		buf_t bufA(minK * minM);
 		for (size_t j = 0; j < N; j += minN)
@@ -221,7 +221,7 @@ public:
 		noexcept(std::false_type) {
 
 		fastMult(source1.rows, source2.rows, source2.columns,
-			source1.begin.get(),source2.begin.get(),dest.begin.get());
+			source1.begin.get(), source2.begin.get(), dest.begin.get());
 
 	}
 

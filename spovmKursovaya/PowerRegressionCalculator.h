@@ -24,7 +24,7 @@ private:
 			ZERO);
 
 		const data_t sumOfSquaredLnIndep = inner_product(
-			lnIndependent.cbegin(),	lnIndependent.cend(),
+			lnIndependent.cbegin(), lnIndependent.cend(),
 			lnIndependent.cbegin(),
 			ZERO);
 

@@ -24,7 +24,7 @@ public:
 
 	template<class InputIt>
 	static  data_t calcRSS(InputIt first, InputIt last) {
-		const data_t avarageValue = std::accumulate(first, last, static_cast < data_t>(0)) / (last - first);
+		const data_t avarageValue = std::accumulate(first, last, static_cast <data_t>(0)) / (last - first);
 
 		data_t RSS = 0;
 		for (; first != last; first++) {
@@ -39,20 +39,20 @@ public:
 		InputIt last) {
 
 		std::vector<data_t> valuesRSS;
-		valuesRSS.reserve(last- first);
-		
+		valuesRSS.reserve(last - first);
+
 		for (auto bound = first + 1; bound != last; bound++) {
 			valuesRSS.push_back(calcRSS(first, bound)
 				+ calcRSS(bound, last));
 		}
 
-		return valuesRSS;	
+		return valuesRSS;
 	}
 
 	template<class InputIt>
-	static auto partitionPointMinRSS(InputIt first, InputIt last){
+	static auto partitionPointMinRSS(InputIt first, InputIt last) {
 
-		const auto& valuesRSS =	calcRSSForAllGroups(first,last);
+		const auto& valuesRSS = calcRSSForAllGroups(first, last);
 		const auto minRssIter = std::min_element(valuesRSS.cbegin(), valuesRSS.cend());
 		const auto offset = std::distance(valuesRSS.cbegin(), minRssIter);
 		return first + offset;
@@ -80,7 +80,7 @@ public:
 	}
 
 private:
-//	Tree<data_t> tree;
+	//	Tree<data_t> tree;
 };
 
 template<class iter_t>
@@ -94,15 +94,15 @@ public:
 
 template<class data_t, class data_iter_t, class = is_arithm<data_t>>
 class Node {
-	public:
+public:
 	std::function<bool(data_t)> question;
 	Subrange<data_iter_t> answers;
-	std::shared_ptr<Node<data_t,data_iter_t>> yes;
-	std::shared_ptr<Node<data_t,data_iter_t>> no;
+	std::shared_ptr<Node<data_t, data_iter_t>> yes;
+	std::shared_ptr<Node<data_t, data_iter_t>> no;
 
 public:
 	Node(const Subrange<data_iter_t>& answers) : answers(answers) {};
-	Node<data_t,data_iter_t>& operator=(const Node<data_t, data_iter_t>& other) {
+	Node<data_t, data_iter_t>& operator=(const Node<data_t, data_iter_t>& other) {
 
 		if (this == &other) {
 			return *this;

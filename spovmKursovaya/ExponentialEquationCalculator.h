@@ -50,7 +50,7 @@ public:
 
 		const data_t interceptY = exp((sumLnDependent - log(base)*sumIndependent) / dataSize);
 
-		return ExponentialEquation<data_t>(interceptY, base);
+		return ExponentialEquation<data_t>(base, interceptY);
 	}
 };
 

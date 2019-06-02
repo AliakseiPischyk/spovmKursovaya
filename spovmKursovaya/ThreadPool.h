@@ -31,8 +31,8 @@ ThreadPool::ThreadPool(const size_t numThreads)
 {
 	for (size_t i = 0; i < numThreads; ++i)
 		executors.emplace_back(
-			[this]{
-		while(true){
+			[this] {
+		while (true) {
 			std::function<void()> task;
 			{
 				std::unique_lock<std::mutex> lock(this->queueMutex);
